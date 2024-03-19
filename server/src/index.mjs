@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { request } from 'express';
 
 const app = express();
+app.use(express.json());
 
 const pupils = [
   {id:1, username: 'ibrohim', displayName: 'Ibrohim'},
@@ -10,9 +11,34 @@ const pupils = [
   {id:5, username: 'muhammadali', displayName: 'Muhammadali'},
 ]
 
-app.get('/', (req, res) => {
+// GET METHODS
+app.get('/api', (req, res) => {
   return res.send(pupils)
+});
+
+app.get('/api/pupils/:id', (req, res) => {
+  const { params: {id},} = req;
+  const pupilByIndex = pupils.findIndex(pupil => pupil.id === id);
+  if(pupilByIndex === -1) return res.sendStatus(404)
+  const pupil = pupils[pupilByIndex];
+  if(!pupil) return res.sendStatus(404)
+  return res.send(pupil)
 })
+
+app.get('/api/pupils', (req, res) => {
+  const {query : {
+    q, v
+  }} = req;
+
+  if(q && v) return res.send(
+    pupils.filter(pupil => pupil[q].includes(v))
+  )
+})
+
+
+
+
+
 
 
 const PORT = process.env.PORT || 3000
