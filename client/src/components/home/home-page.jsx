@@ -2,12 +2,10 @@ import { Main, Saidbar, Navbar } from '../'
 
 const HomePage = () => {
   return (
-    <div className="w-screen h-screen overflow-hidden">
-      <Navbar/>
-      <div className="flex h-full w-full">
+    <div className="grid grid-cols-6 h-screen overflow-hidden">
         <Saidbar/>
+        <Navbar/>
         <Main/>
-      </div>
     </div>
   )
 }

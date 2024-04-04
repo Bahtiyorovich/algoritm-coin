@@ -1,34 +1,28 @@
-import { useState } from "react";
-import { Logo, User } from "../../assets";
+import { User } from "../../assets";
 import { IoIosMenu, IoIosSearch } from "react-icons/io";
 import { MdOutlineWbSunny } from "react-icons/md";
 import { RxMoon } from "react-icons/rx";
+import { useTheme } from "../../helpers/dark-mode";
 
 const Navbar = () => {
-  const [darkMode, setDarkMode] = useState(true);
-
-  const handleDarkMode = () => {
-    setDarkMode(dark => !dark)
-  }
+  
+  const { darkMode, toggleDarkMode} = useTheme();
 
   return (
-    <div className="flex items-center justify-between pr-4 bg-slate-700 h-[70px] text-white">
+    <div className={ darkMode 
+      ? "col-span-5 px-4 flex items-center justify-between bg-slate-800 h-[60px] text-white   border-b border-slate-500 shadow-sm" 
+      : "col-span-5 px-4 flex items-center justify-between bg-white text-slate-700 h-[60px]"}>
       
       <div className="left flex items-center justify-start gap-8">
-        {/* Logo image */}
-        <div className="flex items-center justify-center h-full w-[100px] bg-amber-300">
-          <img src={Logo} alt="logo" className="object-cover w-full h-[70px]"/>
-        </div>
-
-        <div className="menu-icon text-3xl cursor-pointer">
+        <div className="menu-icon text-2xl cursor-pointer">
           <IoIosMenu />
         </div>
 
-        <div className="search flex items-center justify-between gap-2  border rounded-md border-slate-400">
+        <div className="search flex items-center justify-between gap-2 h-[35px]  border rounded-md border-slate-400">
 
-          <input type="text" placeholder="Search..." className="bg-transparent p-2 outline-none"/>
+          <input type="text" placeholder="Search..." className="bg-transparent h-full px-2 outline-none"/>
           
-          <div className="text-2xl cursor-pointer p-2 bg-slate-400 rounded-r">
+          <div className="text-xl cursor-pointer p-1 h-full bg-slate-400 rounded-r">
             <IoIosSearch/>
           </div>
 
@@ -37,7 +31,7 @@ const Navbar = () => {
       </div>
     
       <div className="right flex items-center justify-around gap-4">
-        <div className="menu-icon text-white flex text-2xl cursor-pointer" onClick={handleDarkMode}>
+        <div className="menu-icon flex text-xl cursor-pointer" onClick={toggleDarkMode}>
           { darkMode ? <MdOutlineWbSunny /> : <RxMoon />}
         </div>
 
