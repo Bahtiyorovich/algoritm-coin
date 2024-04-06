@@ -1,17 +1,21 @@
-import { LogoDark, User } from "../../assets";
+import { LogoDark, User } from "../../../assets";
 import { IoPower } from "react-icons/io5";
-import { useState } from "react";
-import { dataMenu } from "../../constants/data";
-import { useTheme } from "../../helpers/dark-mode";
+import { dataMenu } from "../../../constants/data";
+import { useTheme } from "../../../helpers/dark-mode";
+import { styles } from "../../../constants/styles";
+import { Link } from "react-router-dom";
 
 const Saidbar = () => {
 
   const { darkMode} = useTheme();
-  const [user, setUser] = useState(false);
+
+  let user = true;
 
   return (
-    <div className={darkMode ? "col-span-1 row-span-9 bg-slate-800 border-r border-slate-500 shadow-sm text-slate-200" : "col-span-1 row-span-9 shadow-xl bg-white  text-slate-600"}>
-      <div className="flex items-center justify-center h-[100px] w-full">
+    <div className={darkMode 
+      ? "col-span-1 row-span-9 bg-slate-800 border-r border-slate-500 shadow-sm text-slate-200" 
+      : "col-span-1 row-span-9 shadow-xl bg-white  text-slate-600"}>
+      <div className={`${styles.flexCenter} h-[100px] w-full`}>
         <img src={LogoDark} alt="" className="object-contain h-[60px]"/>
       </div>
 
@@ -19,10 +23,12 @@ const Saidbar = () => {
       <div className="py-8 px-4 h-[60%]">
         {
           dataMenu.map(item => (
-          <div className={darkMode ? "flex items-center justify-start gap-2 hover:bg-slate-600 p-2 rounded-md cursor-pointer" : "flex items-center justify-start gap-2 hover:bg-slate-300 p-2 rounded-md cursor-pointer"}>
-            {<item.icon/>}
-            <p className="text-[12px]">{item.title}</p>
-          </div>
+          <Link to={item.link}  key={item.title}>
+            <div className={darkMode ? `${styles.flexStart} gap-2 hover:bg-slate-600 ${styles.roundedEl}` : `${styles.flexStart} gap-2 hover:bg-slate-300 p-2 ${styles.roundedEl}`}>
+              {<item.icon/>}
+              <p className="text-[12px]">{item.title}</p>
+            </div>
+          </Link>
           ))
         }
       </div>

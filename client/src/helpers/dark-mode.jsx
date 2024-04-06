@@ -16,12 +16,12 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
 
-  const toggleDarkMode = () => {
+  const handleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
   };
 
   return (
-    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
+    <ThemeContext.Provider value={{ darkMode, handleDarkMode }}>
       {children}
     </ThemeContext.Provider>
   );
