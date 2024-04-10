@@ -11,7 +11,7 @@ export const dataMenu = [
   {
     icon: SiHomeassistant,
     title: "ALL Information",
-    link: '/all-information',
+    link: '/',
   },
   {
     icon: MdOutlineGroupAdd,
@@ -28,6 +28,7 @@ export const dataMenu = [
     title: "My Account",
     link: '/my-account',
   },
+  
 ];
 
 export const cards = [
