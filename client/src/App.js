@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
 
-  const user = false;
+  const user = true;
 
   if(user) return <HomePage/>;
   return (

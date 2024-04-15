@@ -1,10 +1,11 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
+import { mentors } from '../constants/data';
 
 // Context yaratish
 export const ThemeContext = createContext();
-
 // Provider komponenti
 export const ThemeProvider = ({ children }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [darkMode, setDarkMode] = useState(() => {
     // localStorage dan darkMode-ni olish
     const savedMode = JSON.parse(localStorage.getItem('darkMode'));
@@ -20,8 +21,17 @@ export const ThemeProvider = ({ children }) => {
     setDarkMode(prevMode => !prevMode);
   };
 
+  
+  const handleSearch = term => {
+    setSearchTerm(term);
+  };
+
+  const filteredData = mentors.filter(item =>
+    item.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <ThemeContext.Provider value={{ darkMode, handleDarkMode }}>
+    <ThemeContext.Provider value={{ darkMode, handleDarkMode, searchTerm, handleSearch, filteredData }}>
       {children}
     </ThemeContext.Provider>
   );

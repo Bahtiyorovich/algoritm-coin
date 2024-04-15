@@ -37,7 +37,7 @@ const AllInformation = () => {
           </div>
         </div>
       </div>
-      <MentorInfo/>
+      <MentorInfo />
       <PupilInfo/>
       <div className="col-span-4 h-20 mb-10 bg-white rounded-md"></div>
     </div>

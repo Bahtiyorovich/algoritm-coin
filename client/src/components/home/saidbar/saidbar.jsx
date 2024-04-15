@@ -1,7 +1,7 @@
 import { LogoDark, User } from "../../../assets";
 import { IoPower } from "react-icons/io5";
 import { dataMenu } from "../../../constants/data";
-import { useTheme } from "../../../helpers/dark-mode";
+import { useTheme } from "../../../helpers/context";
 import { styles } from "../../../constants/styles";
 import { Link } from "react-router-dom";
 

@@ -2,13 +2,14 @@ import { User } from "../../../assets";
 import { IoIosMenu, IoIosSearch } from "react-icons/io";
 import { MdOutlineWbSunny } from "react-icons/md";
 import { RxMoon } from "react-icons/rx";
-import { useTheme } from "../../../helpers/dark-mode";
+import { useTheme } from "../../../helpers/context";
 import { styles } from "../../../constants/styles";
 
 const Navbar = () => {
   
-  const { darkMode, handleDarkMode} = useTheme();
+  const { darkMode, handleDarkMode,  searchTerm, handleSearch} = useTheme();
 
+  
   return (
     <div className={ darkMode 
       ? `col-span-5 ${styles.flexStyle} px-4  bg-slate-800 h-[60px] text-white` 
@@ -21,7 +22,13 @@ const Navbar = () => {
 
         <div className={`search ${styles.flexStyle} gap-2 h-[35px]  border rounded-md border-slate-400`}>
 
-          <input type="text" placeholder="Search..." className="bg-transparent h-full px-2 outline-none"/>
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            className="bg-transparent h-full px-2 outline-none"
+            value={searchTerm}
+            onChange={e => handleSearch(e.target.value)}
+          />
           
           <div className="text-xl cursor-pointer p-1 h-full bg-slate-400 rounded-r">
             <IoIosSearch/>
