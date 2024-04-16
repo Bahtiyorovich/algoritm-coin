@@ -6,10 +6,6 @@ const MentorSchema = new Schema({
     required: true,
     unique: true,
   },
-  displayName: { 
-    type: Schema.Types.String, 
-    required: true,
-  },
   phoneNumber: {
     type: Schema.Types.String,
     required: true,
@@ -17,7 +13,11 @@ const MentorSchema = new Schema({
   password: {
     type: Schema.Types.String,
     required: true,
-  } 
+  },
+  status:{
+    type: Schema.Types.String,
+    required: true,
+  }
 }, { timestamps: true});
 
 export const Mentor = model('mentor', MentorSchema)
