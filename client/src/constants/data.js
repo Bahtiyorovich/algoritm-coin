@@ -11,7 +11,7 @@ export const dataMenu = [
   {
     icon: SiHomeassistant,
     title: "ALL Information",
-    link: '/all-information',
+    link: '/',
   },
   {
     icon: MdOutlineGroupAdd,
@@ -81,37 +81,17 @@ export const mentors = [
     createdAt:"04/09/2024",
   },
   {
-    username:"Abdushoxid Bannayev",
-    phoneNumber:"+99890 122 0000",
-    createdAt:"04/09/2024",
-  },
-  {
-    username:"Ayubxon Ahmatxonov",
-    phoneNumber:"+99891 555 5555",
-    createdAt:"04/09/2024",
-  },
-  {
-    username:"Abdushoxid Bannayev",
-    phoneNumber:"+99890 122 0000",
-    createdAt:"04/09/2024",
-  },
-  {
-    username:"Ayubxon Ahmatxonov",
-    phoneNumber:"+99891 555 5555",
-    createdAt:"04/09/2024",
-  },
-  {
-    username:"Ibrohimjon Jakbaraliyev",
+    username:"Muhammadali Ismoiljanov",
     phoneNumber:"+99897 777 7777",
     createdAt:"04/09/2024",
   },
   {
-    username:"Abdushoxid Bannayev",
+    username:"Murodjon Abdurahmonov",
     phoneNumber:"+99890 122 0000",
     createdAt:"04/09/2024",
   },
   {
-    username:"Ayubxon Ahmatxonov",
+    username:"Muhammadjon Olimov",
     phoneNumber:"+99891 555 5555",
     createdAt:"04/09/2024",
   },

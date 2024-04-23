@@ -7,7 +7,7 @@ import { styles } from "../../../constants/styles";
 
 const Navbar = () => {
   
-  const { darkMode, handleDarkMode,  searchTerm, handleSearch} = useTheme();
+  const { darkMode, handleDarkMode} = useTheme();
 
   
   return (
@@ -19,23 +19,6 @@ const Navbar = () => {
         <div className="menu-icon text-2xl cursor-pointer">
           <IoIosMenu />
         </div>
-
-        <div className={`search ${styles.flexStyle} gap-2 h-[35px]  border rounded-md border-slate-400`}>
-
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="bg-transparent h-full px-2 outline-none"
-            value={searchTerm}
-            onChange={e => handleSearch(e.target.value)}
-          />
-          
-          <div className="text-xl cursor-pointer p-1 h-full bg-slate-400 rounded-r">
-            <IoIosSearch/>
-          </div>
-
-        </div>
-
       </div>
     
       <div className="right flex items-center justify-around gap-4">

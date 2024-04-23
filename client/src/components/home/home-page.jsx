@@ -1,6 +1,4 @@
 import { Main, Saidbar, Navbar } from '../'
-import { useEffect, useState } from "react";
-import { mentors } from "../../constants/data";
 
 const HomePage = () => {
   

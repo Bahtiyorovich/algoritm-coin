@@ -22,12 +22,16 @@ export const ThemeProvider = ({ children }) => {
   };
 
   
-  const handleSearch = term => {
-    setSearchTerm(term);
+  const handleSearch = e => {
+    setSearchTerm(e.target.value);
   };
 
-  const filteredData = mentors.filter(item =>
-    item.username.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = mentors.filter((item) =>
+    Object.values(item).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   return (
