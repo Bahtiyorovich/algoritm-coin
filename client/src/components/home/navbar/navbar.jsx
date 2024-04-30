@@ -16,9 +16,9 @@ const Navbar = () => {
       : `col-span-5 px-4 ${styles.flexStyle}  bg-white text-slate-700 h-[60px]`}>
       
       <div className="left flex items-center justify-start gap-8">
-        <div className="menu-icon text-2xl cursor-pointer">
+        {/* <div className="menu-icon text-2xl cursor-pointer">
           <IoIosMenu />
-        </div>
+        </div> */}
       </div>
     
       <div className="right flex items-center justify-around gap-4">
