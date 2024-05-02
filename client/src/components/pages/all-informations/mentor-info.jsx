@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import { useTheme } from "../../../helpers/context";
+import { memo } from "react";
  
 const TABS = [
   {
@@ -168,4 +169,4 @@ const MentorInfo = () => {
   );
 }
 
-export default MentorInfo;
+export default memo(MentorInfo);

@@ -1,9 +1,8 @@
 import { LogoDark, User } from "../../../assets";
 import { IoPower } from "react-icons/io5";
-import { dataMenu } from "../../../constants/data";
 import { useTheme } from "../../../helpers/context";
 import { styles } from "../../../constants/styles";
-import { Link } from "react-router-dom";
+import MenuList from "./menuList";
 
 const Saidbar = () => {
 
@@ -20,18 +19,9 @@ const Saidbar = () => {
         </div>
 
         {/* MENU */}
-        <div className="py-8 px-4 h-[60%]">
-          {
-            dataMenu.map(item => (
-            <Link to={item.link}  key={item.title}>
-              <div className={darkMode ? `${styles.flexStart} gap-4 mb-4 hover:bg-slate-600 ${styles.roundedEl}` : `${styles.flexStart} gap-4 hover:bg-slate-300 p-2 ${styles.roundedEl}`}>
-                {<item.icon/>}
-                <p className="text-[12px]">{item.title}</p>
-              </div>
-            </Link>
-            ))
-          }
-        </div>
+        <MenuList/>
+
+        
         <div className="px-4">
           <div className="flex items-center justify-center gap-4 bg-indigo-700 rounded-md py-2">
             {user 

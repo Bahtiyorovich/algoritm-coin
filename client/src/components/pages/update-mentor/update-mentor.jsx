@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Card, Typography, Input,  IconButton,
   Tooltip, Button, Avatar} from "@material-tailwind/react";
 import { MagnifyingGlassIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -51,7 +51,7 @@ const UpdateMentor = () => {
   )
 }
 
-export default UpdateMentor
+export default memo(UpdateMentor)
  
 function MentorsTable() {
   const {filteredData} = useTheme();
