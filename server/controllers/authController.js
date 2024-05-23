@@ -19,9 +19,9 @@ exports.register = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     try {
-      const user = await authService.register(username, email, password);
+      const user = await authService.register(username, email, password, role);
       res.status(201).json({ user });
     } catch (err) {
       res.status(400).json({ error: err.message });

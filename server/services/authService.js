@@ -2,8 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('../utils/jwt');
 const User = require('../models/User');
 
-exports.register = async (username, email, password) => {
-  const user = await User.create({ username, email, password });
+exports.register = async (username, email, password, role) => {
+  const user = await User.create({ username, email, password, role });
   return user;
 };
 
