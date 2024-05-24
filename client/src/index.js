@@ -10,13 +10,13 @@ import store from './store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
       <BrowserRouter>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+        </Provider>
       </BrowserRouter>
-    </Provider>
   </React.StrictMode>
 );
 

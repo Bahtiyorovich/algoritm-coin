@@ -3,7 +3,7 @@ import { Routes, Route} from 'react-router-dom';
 import { AddMentor, AllInformation, MyAccount, UpdateMentor } from '../../';
 import { SimpleFooter } from "../footer/footer";
 
-const Main = ({data}) => {
+const Main = () => {
   const { darkMode} = useTheme();
   return (
     <div className={ darkMode 
