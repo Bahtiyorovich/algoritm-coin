@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
+const cookieparser = require('cookie-parser');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
@@ -15,7 +15,7 @@ if (!process.env.PORT) {
 
 app.use(express.json());
 app.use(cors());
-app.use(cookieParser());
+app.use(cookieparser());
 app.use('/api/auth', authRoutes);
 
 sequelize.sync()

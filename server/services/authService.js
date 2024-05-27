@@ -7,9 +7,16 @@ exports.getAllUsers = async () => {
   return users;
 };
 
-exports.register = async (username, email, password) => {s
-  const user = await User.create({ username, email, password });
+exports.getUser = async (id) => {
+  const user = await User.findOne({where: { id }});
   return user;
+};
+
+exports.register = async (username, email, password) => {
+  const user = await User.create({ username, email, password });
+  const token = jwt.generateToken(user.id);
+ 
+  return {token, user};
 };
 
 exports.login = async (email, password) => {
@@ -20,5 +27,6 @@ exports.login = async (email, password) => {
   if (!isMatch) throw new Error('Invalid email or password');
 
   const token = jwt.generateToken(user.id);
-  return token;
+  
+  return {token, user};
 };
