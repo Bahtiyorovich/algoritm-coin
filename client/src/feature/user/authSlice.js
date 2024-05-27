@@ -23,11 +23,12 @@ export const authSlice = createSlice({
         signUserFailure: (state, action) => {
             state.isLoading = false;
             state.loggedIn = false;
-            state.error = action.payload;
+            state.error = action.error.message;
         },
         logoutUser: state => {
             state.user = null;
             state.loggedIn = false;
+            state.error = null;
         }
     }
 });

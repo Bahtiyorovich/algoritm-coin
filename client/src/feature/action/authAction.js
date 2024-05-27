@@ -6,18 +6,15 @@ import { signUserStart, signUserFailure, signUserSuccess } from './../../feature
 const REGISTER_ENDPOINT = `/auth/register`;
 const LOGIN_ENDPOINT = `/auth/login`;
 const LOGOUT_ENDPOINT = `/auth/logout`;
-const GETUSERS_ENDPOINT = `/auth/users`;
 
-export const getAllUsers = createAsyncThunk('auth/users', async () => {
-  try {
-    const { data } = await instance.get(GETUSERS_ENDPOINT);
-    return data;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    throw error;
-  }
-});
+// Utility function for handling errors
+const handleApiError = (error, dispatch, failureAction) => {
+  const errorMessage = error.response ? error.response.data.message : "Server error";
+  dispatch(failureAction(errorMessage));
+  throw errorMessage;
+};
 
+// Register user
 export const registerUser = createAsyncThunk("auth/register", async (userData, { dispatch }) => {
   dispatch(signUserStart());
   try {
@@ -25,12 +22,11 @@ export const registerUser = createAsyncThunk("auth/register", async (userData, {
     dispatch(signUserSuccess(data));
     return data;
   } catch (error) {
-    const errorMessage = error.response ? error.response.data.message : "Server error";
-    dispatch(signUserFailure(errorMessage));
-    throw error;
+    return handleApiError(error, dispatch, signUserFailure);
   }
 });
 
+// Login user
 export const loginUser = createAsyncThunk("auth/login", async (userData, { dispatch }) => {
   dispatch(signUserStart());
   try {
@@ -38,21 +34,19 @@ export const loginUser = createAsyncThunk("auth/login", async (userData, { dispa
     dispatch(signUserSuccess(data));
     return data;
   } catch (error) {
-    const errorMessage = error.response ? error.response.data.message : 'Server error';
-    dispatch(signUserFailure(errorMessage));
-    throw error;
+    return handleApiError(error, dispatch, signUserFailure);
   }
 });
 
-export const logoutUser = createAsyncThunk("auth/logout", async ({ dispatch }) => {
-  dispatch(signUserStart());
+// Logout user
+export const logoutUser = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
   try {
-    const { data } = await instance.post(LOGOUT_ENDPOINT);
-    dispatch(signUserSuccess(data));
-    return data;
+    await instance.post(LOGOUT_ENDPOINT);
+    // Clear the cookie by setting its expiration to a past date
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    dispatch(signUserSuccess(null)); // Clear user state upon successful logout
+    return null;
   } catch (error) {
-    const errorMessage = error.response ? error.response.data.message : 'Server error';
-    dispatch(signUserFailure(errorMessage));
-    throw error;
+    return handleApiError(error, dispatch, signUserFailure);
   }
 });

@@ -11,7 +11,7 @@ const Main = () => {
         : "col-span-5 h-[100vh] overflow-auto bg-neutral-100 p-8 "}
     >
       <Routes>
-        <Route path='/' element={<AllInformation/>}/>
+        <Route path='/all-info' element={<AllInformation/>}/>
         <Route path='/add-mentor' element={<AddMentor/>}/>
         <Route path='/update-mentor' element={<UpdateMentor/>}/>
         <Route path='/my-account' element={<MyAccount/>}/>
