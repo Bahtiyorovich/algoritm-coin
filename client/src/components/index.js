@@ -8,3 +8,4 @@ export { default as UpdateMentor } from './pages/update-mentor/update-mentor.jsx
 export { default as MyAccount} from './pages/my-account/my-account.jsx';
 export { default as Login } from './pages/auth/login.jsx';
 export { default as Register } from './pages/auth/register.jsx';
+export { default as NotFoundPage } from './pages/NotFoundPage.jsx';
