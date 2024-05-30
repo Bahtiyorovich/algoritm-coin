@@ -1,23 +1,28 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IconButton } from "@material-tailwind/react";
 import { IoPower } from "react-icons/io5";
-import { logoutUser } from '../../../feature/action/authAction';
+import { logout } from '../../../feature/action/authAction';
 import { useTheme } from '../../../helpers/context';
 import { styles } from '../../../constants/styles';
-import {LogoDark,User} from '../../../assets';
+import { LogoDark, User } from '../../../assets';
 import MenuList from './menuList';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector(state => state.auth);
+  const { user, loggedIn } = useSelector(state => state.auth);
   const { darkMode } = useTheme();
 
+  useEffect(() => {
+    if (!loggedIn) {
+      navigate('/login');
+    }
+  }, [loggedIn, navigate]);
+
   const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate('/login');
+    dispatch(logout());
   };
 
   return (
@@ -33,7 +38,7 @@ const Sidebar = () => {
         <div className="flex items-center justify-center gap-4 bg-indigo-700 rounded-md py-2">
           {user?.user.img 
             ? <img src={User} alt="user" className="w-10 h-10 rounded-full object-cover" />
-            : <h2 className="w-10 h-10 rounded-full p-2 bg-slate-300 text-slate-800 font-bold">{user?.user.username?.slice(0,2).toUpperCase()}</h2>}
+            : <h2 className="w-10 h-10 rounded-full p-2 bg-slate-300 text-slate-800 font-bold">{user?.user.username?.slice(0, 2).toUpperCase()}</h2>}
           <p className="text-white text-[12px]">{user?.user.username}</p>
           <IconButton onClick={handleLogout} className="text-white text-xl bg-indigo-400">
             <IoPower />

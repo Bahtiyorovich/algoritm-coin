@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { getUserID } from '../action/authAction.js';
 const initialState = {
     isLoading: false,
     loggedIn: false,
@@ -25,12 +25,26 @@ export const authSlice = createSlice({
             state.loggedIn = false;
             state.error = action.payload;
         },
-        logoutUser: state => {
-            state.user = null;
+        logoutUser: (state) => {
             state.loggedIn = false;
+            state.user = null;
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+          .addCase(getUserID.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(getUserID.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.user = action.payload;
             state.error = null;
-        }
-    }
+          })
+          .addCase(getUserID.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload;
+          });
+      },
 });
 
 export const { signUserStart, signUserFailure, signUserSuccess, logoutUser } = authSlice.actions;

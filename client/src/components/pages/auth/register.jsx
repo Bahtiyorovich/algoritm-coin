@@ -10,11 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../feature/action/authAction";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useEffect } from "react";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, loggedIn } = useSelector((state) => state.auth);
+  const { isLoading, loggedIn, error } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -36,12 +37,14 @@ const Register = () => {
     }),
     onSubmit: (values) => {
       dispatch(registerUser(values));
-      if (loggedIn === true) {
-        navigate(`/`);
-      }
     },
   });
 
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/');
+    }
+  }, [loggedIn, navigate]);
   // npm i formik yup
 
   return (
@@ -56,6 +59,7 @@ const Register = () => {
         onSubmit={formik.handleSubmit}
         className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
       >
+        {error ? <p className="h-12 w-full bg-red-50 rounded-md border-[1px] border-red-500 px-4 flex items-center justify-start text-red-300 ">{error}</p> : "" }
         <div className="mb-1 flex flex-col gap-6">
           <Typography variant="h6" color="blue-gray" className="-mb-3">
             Username

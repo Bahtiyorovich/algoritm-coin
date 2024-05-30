@@ -1,7 +1,18 @@
 import { Avatar, Button, Input, Tooltip, IconButton } from "@material-tailwind/react";
 import { CameraIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const MyAccount = () => {
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { user, isLoading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(getUserID(id));
+  }, [dispatch, id]);
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 h-3/4 w-full">
       <div className="h-40 w-72 rounded-xl flex items-center justify-start gap-4">

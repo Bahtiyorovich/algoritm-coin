@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../service/api";
-import { signUserStart, signUserFailure, signUserSuccess } from './../../feature/user/authSlice';
+import { signUserStart, signUserFailure, signUserSuccess, logoutUser } from './../../feature/user/authSlice';
 
 // API endpoints
 const REGISTER_ENDPOINT = `/auth/register`;
@@ -13,6 +13,16 @@ const handleApiError = (error, dispatch, failureAction) => {
   dispatch(failureAction(errorMessage));
   throw errorMessage;
 };
+
+export const getUserID = createAsyncThunk('auth/getUserID', async (userId, thunkAPI) => {
+  const response = await instance.get(`/user/${userId}`);
+  const data = await response.json();
+  if (response.ok) {
+    return data;
+  } else {
+    return thunkAPI.rejectWithValue(data);
+  }
+});
 
 // Register user
 export const registerUser = createAsyncThunk("auth/register", async (userData, { dispatch }) => {
@@ -39,12 +49,13 @@ export const loginUser = createAsyncThunk("auth/login", async (userData, { dispa
 });
 
 // Logout user
-export const logoutUser = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
+export const logout = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
   try {
     await instance.post(LOGOUT_ENDPOINT);
     // Clear the cookie by setting its expiration to a past date
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    dispatch(signUserSuccess(null)); // Clear user state upon successful logout
+    dispatch(signUserSuccess(null));
+    dispatch(logoutUser()) // Clear user state upon successful logout
     return null;
   } catch (error) {
     return handleApiError(error, dispatch, signUserFailure);
