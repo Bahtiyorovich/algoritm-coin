@@ -8,14 +8,16 @@ require('dotenv').config();
 const app = express();
 
 // Validate environment variables
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 if (!process.env.PORT) {
-  console.error('PORT environment variable is not set. Defaulting to 3000.');
+  console.error('PORT environment variable is not set. Defaulting to 5000.');
 }
 
 app.use(express.json());
 app.use(cors());
 app.use(cookieparser());
+
+// routes
 app.use('/api/auth', authRoutes);
 
 sequelize.sync()

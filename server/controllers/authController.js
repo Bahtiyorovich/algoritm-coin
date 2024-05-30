@@ -1,7 +1,7 @@
-const { body, validationResult } = require('express-validator');
 const authService = require('../services/authService');
 const User = require('../models/User');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('../utils/jwt');
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -16,37 +16,37 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res ) => {
+exports.getUserID = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await authService.getUser(id)
-    if(!user) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(400).json({ error: error.message });
   }
 };
 
+
 exports.register = [
-  body('username').isLength({ min: 3 }).withMessage('Enter a valid username'),
-  body('email').isEmail().withMessage('Enter a valid email address'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
     const { username, email, password } = req.body;
     try {
-      const {user, token} = await authService.register(username, email, password);
-      res.cookie('token', token, {
-        maxAge: 900000,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-      });
-      res.status(201).json({ message: 'Registration successful', user });
+      const findusername = await User.findOne({where: {username}});
+      const finduseremail = await User.findOne({where: { email}});
+      if(findusername) res.status(401).send({message: 'This username already exists'});
+      if(finduseremail) res.status(401).send({message: 'This user email already exists'});
+      if(!findusername || !finduseremail){
+        const {user, token} = await authService.register(username, email, password);
+        res.cookie('token', token, {
+          maxAge: 900000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+        });
+        res.status(201).json(user);
+      }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -54,24 +54,23 @@ exports.register = [
 ];
 
 exports.login = [
-  body('email').isEmail().withMessage('Enter a valid email address'),
-  body('password').exists().withMessage('Password is required'),
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
     const { email, password } = req.body;
     try {
-      const {user, token} = await authService.login(email, password);
-      res.cookie('token', token, {
-        maxAge: 900000,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-      });
-      res.status(200).json({ message: 'Login successful', user });
+      const user = await User.findOne({ where: { email } });
+      if(!user) res.status(401).send({message: 'Invalid email or password'});
+      await bcrypt.compare(password, user.password);
+      const token = jwt.generateToken(user.id);
+      if(user){
+        res.cookie('token', token, {
+          maxAge: 900000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+        });
+        res.status(200).json(user);
+      }
     } catch (error) {
-      res.status(400).json({ error: 'Invalid email or password' });
+      res.status(400).json({ error: error.message });
     }
   }
 ];
@@ -81,7 +80,7 @@ exports.logout = async (req, res) => {
     res.clearCookie('token');
     res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
-    res.status(500).json({ error: 'Error logging out' });
+    res.status(400).json({ error: 'Error logging out' });
   }
 };
 
