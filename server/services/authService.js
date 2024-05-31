@@ -8,6 +8,5 @@ exports.getAllUsers = async () => {
 
 exports.register = async (username, email, password) => {
   const user = await User.create({ username, email, password });
-  const token = jwt.generateToken(user.id);
-  return {token, user};
+  return user;
 };

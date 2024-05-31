@@ -1,7 +1,8 @@
 const authService = require('../services/authService');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const jwt = require('../utils/jwt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -16,10 +17,9 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.getUserID = async (req, res) => {
-  const { id } = req.params;
+exports.getUser = async (req, res) => {
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -39,12 +39,7 @@ exports.register = [
       if(findusername) res.status(401).send({message: 'This username already exists'});
       if(finduseremail) res.status(401).send({message: 'This user email already exists'});
       if(!findusername || !finduseremail){
-        const {user, token} = await authService.register(username, email, password);
-        res.cookie('token', token, {
-          maxAge: 900000,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-        });
+        const user = await authService.register(username, email, password);
         res.status(201).json(user);
       }
     } catch (error) {
@@ -58,9 +53,8 @@ exports.login = [
     const { email, password } = req.body;
     try {
       const user = await User.findOne({ where: { email } });
-      if(!user) res.status(401).send({message: 'Invalid email or password'});
-      await bcrypt.compare(password, user.password);
-      const token = jwt.generateToken(user.id);
+      if (!user || !await bcrypt.compare(password, user.password)) res.status(401).send({message: 'Invalid email or password'});
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       if(user){
         res.cookie('token', token, {
           maxAge: 900000,

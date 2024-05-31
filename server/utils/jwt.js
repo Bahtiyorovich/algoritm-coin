@@ -1,12 +1,17 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-exports.generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: '1h',
-  });
+exports.authMiddleware = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
 };
 
-exports.verifyToken = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
-};
