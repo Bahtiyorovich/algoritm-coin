@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { dataMenu } from "../../../constants/data";
 import { Link } from "react-router-dom";
-import { useTheme } from "../../../helpers/context";
+import { useTheme } from "../../../contexts/darkModeContext";
 import { styles } from "../../../constants/styles";
 
 const MenuList = () => {

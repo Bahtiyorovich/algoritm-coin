@@ -1,7 +1,6 @@
-import { User } from "../../../assets";
 import { MdOutlineWbSunny } from "react-icons/md";
 import { RxMoon } from "react-icons/rx";
-import { useTheme } from "../../../helpers/context";
+import { useTheme } from "../../../contexts/darkModeContext";
 import { styles } from "../../../constants/styles";
 import { useSelector } from "react-redux";
 
@@ -28,9 +27,10 @@ const Navbar = () => {
 
       {/* user image */}
         <div className="flex items-center justify-center h-10 w-10">
-        {user?.user.img 
-            ? <img src={User} alt="user" className="w-10 h-10 rounded-full object-cover" />
-            : <h2 className="w-10 h-10 rounded-full p-2 bg-slate-300 text-slate-800 font-bold">{user?.user.username?.slice(0,2).toUpperCase()}</h2>}
+          {/* <img src={User} alt="user" className="w-10 h-10 rounded-full object-cover" /> */}
+          <h2 className="w-10 h-10 rounded-full p-2 bg-slate-300 text-slate-800 font-bold">
+          {(user?.username || "").slice(0, 2).toUpperCase()}
+          </h2>
         </div>
 
       </div>

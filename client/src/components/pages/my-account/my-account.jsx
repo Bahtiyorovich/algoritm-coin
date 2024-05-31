@@ -1,17 +1,14 @@
-import { Avatar, Button, Input, Tooltip, IconButton } from "@material-tailwind/react";
+import React, { useEffect } from "react";
+import { Avatar, Button, Input, IconButton } from "@material-tailwind/react";
 import { CameraIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useUserContext } from "../../../contexts/userContext";
 
 const MyAccount = () => {
-
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const { user, isLoading, error } = useSelector((state) => state.auth);
+  const { user } = useUserContext();
 
   useEffect(() => {
-    dispatch(getUserID(id));
-  }, [dispatch, id]);
+    console.log("User data:", user);
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 h-3/4 w-full">
@@ -27,28 +24,37 @@ const MyAccount = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-white font-semibold text-2xl ">John Doe</h3>
+          <h3 className="text-white font-semibold text-2xl ">{user?.username || "Username"}</h3>
           <p className="text-white bg-cyan-600 rounded-full text-center mt-2">
-            admin
+            {user?.role || "Role"}
           </p>
         </div>
       </div>
       <div className="h-52 w-80 bg-blue-gray-900 rounded-xl flex flex-col gap-4 items-center justify-center p-4">
         <div className="w-72 flex items-center justify-between">
-          <Input variant="static" className="border-b-[1px] " label="Fullname" placeholder="Full name"/>
-            <IconButton variant="text" className="cursor-pointer">
-              <PencilIcon className="h-4 w-4 text-white" />
-            </IconButton>
+          <Input
+            variant="static"
+            className="border-b-[1px]"
+            label="Fullname"
+            placeholder={user?.fullname || "Full name"}
+          />
+          <IconButton variant="text" className="cursor-pointer">
+            <PencilIcon className="h-4 w-4 text-white" />
+          </IconButton>
         </div>
 
         <div className="w-72 flex items-center justify-between">
-          <Input variant="static" className="border-b-[1px] " label="password" placeholder="Password"/>
-            <IconButton variant="text" className="cursor-pointer">
-              <PencilIcon className="h-4 w-4 text-white" />
-            </IconButton>
-          
+          <Input
+            variant="static"
+            className="border-b-[1px]"
+            label="Password"
+            placeholder="Password"
+          />
+          <IconButton variant="text" className="cursor-pointer">
+            <PencilIcon className="h-4 w-4 text-white" />
+          </IconButton>
         </div>
-        <Button  className="bg-cyan-600 w-full">save</Button>
+        <Button className="bg-cyan-600 w-full">Save</Button>
       </div>
     </div>
   );

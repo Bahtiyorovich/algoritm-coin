@@ -7,15 +7,14 @@ import {
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../../feature/action/authAction";
+import { registerUser, getUserID } from "../../../feature/action/authAction";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect } from "react";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, loggedIn, error } = useSelector((state) => state.auth);
+  const { isLoading, error } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -35,17 +34,17 @@ const Register = () => {
         .min(8, 'Password is too short - should be 8 chars minimum.')
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
     }),
-    onSubmit: (values) => {
-      dispatch(registerUser(values));
+    onSubmit: async (values) => {
+      const resultAction = await dispatch(registerUser(values));
+      if (registerUser.fulfilled.match(resultAction)) {
+        const userId = resultAction.payload.id;
+        dispatch(getUserID(userId));
+        navigate('/');
+      }
     },
   });
-
-  useEffect(() => {
-    if (loggedIn) {
-      navigate('/');
-    }
-  }, [loggedIn, navigate]);
-  // npm i formik yup
+  
+  
 
   return (
     <Card color="transparent" shadow={false}>

@@ -4,7 +4,7 @@ import { mentors } from '../constants/data';
 // Context yaratish
 export const ThemeContext = createContext();
 // Provider komponenti
-export const ThemeProvider = ({ children }) => {
+export const DarkModeProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [darkMode, setDarkMode] = useState(() => {
     // localStorage dan darkMode-ni olish

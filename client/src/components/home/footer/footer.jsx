@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import { useTheme } from "../../../helpers/context";
+import { useTheme } from "../../../contexts/darkModeContext";
  
 export function SimpleFooter() {
 

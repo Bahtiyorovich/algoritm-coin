@@ -1,4 +1,4 @@
-import { useTheme } from "../../../helpers/context";
+import { useTheme } from "../../../contexts/darkModeContext";
 import { Routes, Route} from 'react-router-dom';
 import { AddMentor, AllInformation, MyAccount, UpdateMentor } from '../../';
 import { SimpleFooter } from "../footer/footer";

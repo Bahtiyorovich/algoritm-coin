@@ -16,7 +16,7 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
-import { useTheme } from "../../../helpers/context";
+import { useTheme } from "../../../contexts/darkModeContext";
 import { memo } from "react";
  
 const TABS = [

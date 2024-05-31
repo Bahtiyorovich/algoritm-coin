@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { Card, Typography, Input,  IconButton,
   Tooltip, Button, Avatar} from "@material-tailwind/react";
 import { MagnifyingGlassIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useTheme } from '../../../helpers/context';
+import { useTheme } from '../../../contexts/darkModeContext';
 import { UpdatePage } from '../../../assets/';
 
 const TABLE_HEAD = ["UserName", "Phone Number", "Date", "Edits", "Deleted"];

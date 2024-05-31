@@ -1,63 +1,92 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../service/api";
-import { signUserStart, signUserFailure, signUserSuccess, logoutUser } from './../../feature/user/authSlice';
 
-// API endpoints
-const REGISTER_ENDPOINT = `/auth/register`;
-const LOGIN_ENDPOINT = `/auth/login`;
-const LOGOUT_ENDPOINT = `/auth/logout`;
-
-// Utility function for handling errors
-const handleApiError = (error, dispatch, failureAction) => {
-  const errorMessage = error.response ? error.response.data.message : "Server error";
-  dispatch(failureAction(errorMessage));
-  throw errorMessage;
-};
-
-export const getUserID = createAsyncThunk('auth/getUserID', async (userId, thunkAPI) => {
-  const response = await instance.get(`/user/${userId}`);
-  const data = await response.json();
-  if (response.ok) {
-    return data;
-  } else {
-    return thunkAPI.rejectWithValue(data);
-  }
-});
-
-// Register user
-export const registerUser = createAsyncThunk("auth/register", async (userData, { dispatch }) => {
-  dispatch(signUserStart());
+export const registerUser = createAsyncThunk("auth/registerUser", async (userData, { rejectWithValue }) => {
   try {
-    const { data } = await instance.post(REGISTER_ENDPOINT, userData);
-    dispatch(signUserSuccess(data));
+    const { data } = await instance.post("/auth/register", userData);
     return data;
   } catch (error) {
-    return handleApiError(error, dispatch, signUserFailure);
+    const errorMessage = error.response ? error.response.data.message : "Server error";
+    return rejectWithValue(errorMessage);
   }
 });
 
-// Login user
-export const loginUser = createAsyncThunk("auth/login", async (userData, { dispatch }) => {
-  dispatch(signUserStart());
+export const loginUser = createAsyncThunk("auth/loginUser", async (userData, { rejectWithValue }) => {
   try {
-    const { data } = await instance.post(LOGIN_ENDPOINT, userData);
-    dispatch(signUserSuccess(data));
+    const { data } = await instance.post("/auth/login", userData);
     return data;
   } catch (error) {
-    return handleApiError(error, dispatch, signUserFailure);
+    const errorMessage = error.response ? error.response.data.message : "Server error";
+    return rejectWithValue(errorMessage);
   }
 });
 
-// Logout user
-export const logout = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
+export const getUserID = createAsyncThunk("auth/getUserID", async (userId, { rejectWithValue }) => {
   try {
-    await instance.post(LOGOUT_ENDPOINT);
-    // Clear the cookie by setting its expiration to a past date
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    dispatch(signUserSuccess(null));
-    dispatch(logoutUser()) // Clear user state upon successful logout
-    return null;
+    const response = await instance.get(`/auth/user/${userId}`);
+    return response.data;
   } catch (error) {
-    return handleApiError(error, dispatch, signUserFailure);
+    return rejectWithValue(error.message);
   }
 });
+
+// // API endpoints
+// const REGISTER_ENDPOINT = `/auth/register`;
+// const LOGIN_ENDPOINT = `/auth/login`;
+// const LOGOUT_ENDPOINT = `/auth/logout`;
+
+// // Utility function for handling errors
+// const handleApiError = (error, dispatch, failureAction) => {
+//   const errorMessage = error.response ? error.response.data.message : "Server error";
+//   dispatch(failureAction(errorMessage));
+//   throw errorMessage;
+// };
+
+// export const getUserID = createAsyncThunk('auth/getUserID', async (userId, thunkAPI) => {
+//   const response = await instance.get(`/auth/user/${userId}`);
+//   const data = await response.json();
+//   console.log(data);
+//   if (response.ok) {
+//     return data;
+//   } else {
+//     return thunkAPI.rejectWithValue(data);
+//   }
+// });
+
+// // Register user
+// export const registerUser = createAsyncThunk("auth/register", async (userData, { dispatch }) => {
+//   dispatch(signUserStart());
+//   try {
+//     const { data } = await instance.post(REGISTER_ENDPOINT, userData);
+//     dispatch(signUserSuccess(data));
+//     return data;
+//   } catch (error) {
+//     return handleApiError(error, dispatch, signUserFailure);
+//   }
+// });
+
+// // Login user
+// export const loginUser = createAsyncThunk("auth/login", async (userData, { dispatch }) => {
+//   dispatch(signUserStart());
+//   try {
+//     const { data } = await instance.post(LOGIN_ENDPOINT, userData);
+//     dispatch(signUserSuccess(data));
+//     return data;
+//   } catch (error) {
+//     return handleApiError(error, dispatch, signUserFailure);
+//   }
+// });
+
+// // Logout user
+// export const logout = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
+//   try {
+//     await instance.post(LOGOUT_ENDPOINT);
+//     // Clear the cookie by setting its expiration to a past date
+//     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+//     dispatch(signUserSuccess(null));
+//     dispatch(logoutUser()) // Clear user state upon successful logout
+//     return null;
+//   } catch (error) {
+//     return handleApiError(error, dispatch, signUserFailure);
+//   }
+// });
