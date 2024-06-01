@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   
   const { darkMode, handleDarkMode} = useTheme();
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
   
   return (
     <div className={ darkMode 

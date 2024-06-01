@@ -1,98 +1,90 @@
 import React, { useEffect } from "react";
 import {
   Card,
-  Input,
   Button,
   Typography,
   Spinner,
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, getUserID } from "../../../feature/action/authAction";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { loginUser } from "../../../feature/action/authAction";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { LoginSchema } from "./authFormikSchema";
 
 const Login = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, loggedIn, user, error } = useSelector((state) => state.auth);
-
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: Yup.object().shape({
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string()
-        .required('No password provided.')
-        .min(8, 'Password is too short - should be 8 chars minimum.')
-        .matches(/[a-zA-Z]/, 'Password can only contain Latin letters'),
-    }),
-    onSubmit: async (values) => {
-      const resultAction = await dispatch(loginUser(values));
-      if (loginUser.fulfilled.match(resultAction)) {
-        const userId = resultAction.payload.id;
-        dispatch(getUserID(userId));
-        navigate('/');
-      }
-    },
-  });
-
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
+  const initialValues = {
+    email: '',
+    password: ''
+  };
+  const handleSubmit = (values, { setSubmitting }) => {
+    dispatch(loginUser(values))
+      .unwrap()
+      .then(() => {
+        navigate('/')
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
+    };
+    
   return (
-    <Card color="transparent" shadow={false}>
-      <Typography variant="h4" color="blue-gray">Sign In</Typography>
-      <Typography color="gray" className="mt-1 font-normal">
-        Nice to meet you! Enter your details to login.
+    <Card color="transparent" shadow={false} className="max-w-lg mx-auto p-8">
+      <Typography variant="h4" color="blue-gray" className="text-center">
+        Sign In
       </Typography>
-      <form
-        onSubmit={formik.handleSubmit}
-        className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+      <Typography color="gray" className="mt-1 text-center font-normal">
+        Nice to meet you! Enter your details to sign up.
+      </Typography>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={LoginSchema}
+        onSubmit={handleSubmit}
       >
-        {error && (
-          <p className="h-12 w-full bg-red-50 rounded-md border-[1px] border-red-500 px-4 flex items-center justify-start text-red-300">
-            {error}
-          </p>
+        {({ isSubmitting }) => (
+          <Form className="mt-8 mb-2 space-y-4">
+            {error && (
+              <p className="bg-red-50 text-red-600 border border-red-500 rounded-md p-4">
+                {error}
+              </p>
+            )}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <Field
+                type="email"
+                name="email"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+              <ErrorMessage name="email" component="div" className="text-red-600 text-sm mt-1" />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <Field
+                type="password"
+                name="password"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+              <ErrorMessage name="password" component="div" className="text-red-600 text-sm mt-1" />
+            </div>
+            <Button type="submit" disabled={isSubmitting || loading} className="mt-6 w-full">
+              {loading ? <Spinner size="sm" /> : "Sign In"}
+            </Button>
+            <Typography color="gray" className="mt-4 text-center font-normal">
+              Create an account?{" "}
+              <Link to="/register" className="font-medium text-gray-900">Sign Up</Link>
+            </Typography>
+          </Form>
         )}
-        <div className="mb-1 flex flex-col gap-6">
-          <Typography variant="h6" color="blue-gray" className="-mb-3">Email address</Typography>
-          <Input
-            size="lg"
-            placeholder="Enter email address"
-            className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-            labelProps={{ className: "before:content-none after:content-none" }}
-            name="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <div className="text-red-500">{formik.errors.email}</div>
-          )}
-          <Typography variant="h6" color="blue-gray" className="-mb-3">Password</Typography>
-          <Input
-            type="password"
-            size="lg"
-            placeholder="********"
-            className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-            labelProps={{ className: "before:content-none after:content-none" }}
-            name="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <div className="text-red-500">{formik.errors.password}</div>
-          )}
-        </div>
-        <Button type="submit" className="mt-6" fullWidth>
-          {isLoading ? <Spinner /> : "Sign In"}
-        </Button>
-        <Typography color="gray" className="mt-4 text-center font-normal">
-          Create an account?{" "}
-          <Link to="/register" className="font-medium text-gray-900">Sign Up</Link>
-        </Typography>
-      </form>
+      </Formik>
     </Card>
   );
 };

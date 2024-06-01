@@ -11,7 +11,7 @@ export const dataMenu = [
   {
     icon: SiHomeassistant,
     title: "ALL Information",
-    link: '/all-info',
+    link: '/',
   },
   {
     icon: MdOutlineGroupAdd,

@@ -7,19 +7,17 @@ import { useTheme } from '../../../contexts/darkModeContext';
 import { styles } from '../../../constants/styles';
 import { LogoDark } from '../../../assets';
 import MenuList from './menuList';
-import { logoutUser } from '../../../feature/user/authSlice';
+import { logoutUser } from '../../../feature/action/authAction';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { darkMode } = useTheme();
-  const { user, loggedIn } = useSelector(state => state.auth);
+  const user  = useSelector(state => state.user.user);
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    if (!loggedIn) {
-      navigate('/login');
-    }
+    navigate('/login');
   };
 
   return (

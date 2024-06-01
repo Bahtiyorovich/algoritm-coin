@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Avatar, Button, Input, IconButton } from "@material-tailwind/react";
 import { CameraIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { useUserContext } from "../../../contexts/userContext";
+import { useSelector } from "react-redux";
 
 const MyAccount = () => {
-  const { user } = useUserContext();
-
-  useEffect(() => {
-    console.log("User data:", user);
-  }, [user]);
+  
+  const user = useSelector(state => state.user.user)
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 h-3/4 w-full">
