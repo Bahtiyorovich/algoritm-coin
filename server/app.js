@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const cookieparser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
@@ -13,9 +13,12 @@ if (!process.env.PORT) {
   console.error('PORT environment variable is not set. Defaulting to 5000.');
 }
 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
-app.use(cors());
-app.use(cookieparser());
+app.use(cookieParser());
 
 // routes
 app.use('/api/auth', authRoutes);

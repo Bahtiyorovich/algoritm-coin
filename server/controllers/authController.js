@@ -1,8 +1,8 @@
 const authService = require('../services/authService');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -20,18 +20,13 @@ exports.getAllUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.status(200).json(user);
+    res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-
-exports.register = [
-  async (req, res) => {
+exports.register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
       const findusername = await User.findOne({where: {username}});
@@ -45,29 +40,19 @@ exports.register = [
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  },
-];
+  };
 
-exports.login = [
-  async (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
       const user = await User.findOne({ where: { email } });
       if (!user || !await bcrypt.compare(password, user.password)) res.status(401).send({message: 'Invalid email or password'});
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      if(user){
-        res.cookie('token', token, {
-          maxAge: 900000,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-        });
-        res.status(200).json(user);
-      }
+      authService.createAndSaveToken(user, res);
+      res.status(200).json(user);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  }
-];
+  };
 
 exports.logout = async (req, res) => {
   try {
