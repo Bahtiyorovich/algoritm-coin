@@ -1,12 +1,10 @@
 const authService = require('../services/authService');
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 
-
-exports.getAllUsers = async (req, res) => {
+exports.getAllAdmins = async (req, res) => {
   try {
-    const users = await authService.getAllUsers();
+    const users = await authService.getAllAdmins();
     if (users.length === 0) {
       return res.status(404).json({ message: 'No users found' });
     }
@@ -17,9 +15,9 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res) => {
+exports.getAdmin = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id);
+    const user = await Admin.findByPk(req.user.id);
     res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -29,8 +27,8 @@ exports.getUser = async (req, res) => {
 exports.register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-      const findusername = await User.findOne({where: {username}});
-      const finduseremail = await User.findOne({where: { email}});
+      const findusername = await Admin.findOne({where: {username}});
+      const finduseremail = await Admin.findOne({where: { email}});
       if(findusername) res.status(401).send({message: 'This username already exists'});
       if(finduseremail) res.status(401).send({message: 'This user email already exists'});
       if(!findusername || !finduseremail){
@@ -45,10 +43,10 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await Admin.findOne({ where: { email } });
       if (!user || !await bcrypt.compare(password, user.password)) res.status(401).send({message: 'Invalid email or password'});
       authService.createAndSaveToken(user, res);
-      res.status(200).json(user);
+      res.status(200).json({ message: 'Login muvaffaqiyatli' });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -63,11 +61,11 @@ exports.logout = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteAdmin = async (req, res) => {
   const { id } = req.params;
   try {
-    await User.destroy({ where: { id } });
-    res.status(200).json({ message: 'User deleted successfully' });
+    await Admin.destroy({ where: { id } });
+    res.status(200).json({ message: 'Admin deleted successfully' });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Error deleting user' });
