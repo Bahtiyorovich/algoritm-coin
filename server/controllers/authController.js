@@ -16,8 +16,9 @@ exports.getAllAdmins = async (req, res) => {
 };
 
 exports.getAdmin = async (req, res) => {
+    const { id } = req.params;
   try {
-    const user = await Admin.findByPk(req.user.id);
+    const user = await Admin.findByPk(id);
     res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -33,7 +34,7 @@ exports.register = async (req, res) => {
       if(finduseremail) res.status(401).send({message: 'This user email already exists'});
       if(!findusername || !finduseremail){
         const user = await authService.register(username, email, password);
-        res.status(201).json(user);
+        res.status(201).json({admin: user});
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -46,7 +47,7 @@ exports.login = async (req, res) => {
       const user = await Admin.findOne({ where: { email } });
       if (!user || !await bcrypt.compare(password, user.password)) res.status(401).send({message: 'Invalid email or password'});
       authService.createAndSaveToken(user, res);
-      res.status(200).json({ message: 'Login muvaffaqiyatli' });
+      res.status(200).json({ message: 'Login muvaffaqiyatli', admin: user });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

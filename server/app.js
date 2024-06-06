@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const mentorRoutes = require('./routes/mentorRoutes');
+const pupilsRoutes = require('./routes/pupilsRoutes');
+const { authenticate } = require('./middlewares/authMiddleware');
 require('dotenv').config();
 
 const app = express();
@@ -21,10 +23,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(authenticate);
 // routes
 app.use('/api/auth', authRoutes);
 app.use('/api/mentors', mentorRoutes);
-
+app.use('/api/pupils', pupilsRoutes);
 
 sequelize.sync()
   .then(() => {

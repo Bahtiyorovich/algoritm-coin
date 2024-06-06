@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Pupil = require('./Pupil');
 
 const Mentor = sequelize.define('Mentor', {
   username: {
@@ -29,5 +30,8 @@ const Mentor = sequelize.define('Mentor', {
     allowNull: false,
   }
 })
+
+Mentor.belongsToMany(Pupil, { through: 'TeacherPupil' });
+Pupil.belongsToMany(Mentor, { through: 'TeacherPupil' });
 
 module.exports = Mentor;

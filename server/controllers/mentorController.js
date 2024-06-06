@@ -10,16 +10,29 @@ exports.createMentor = async (req, res) => {
   }
 }
 
-exports.getMentor = async (req, res) => {
-  const { id } = req.params;
+exports.getAllTeachers = async (req, res) => {
   try {
-    const mentor = await mentorService.getMentor(id);
-    if(!mentor) res.status(404).json({message: 'Mentor not found'});
-    res.status(200).json({ mentor });
+    const teachers = await Mentor.findAll();
+    res.status(200).json(teachers);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-}
+};
+
+exports.getTeacherWithPupils = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const teacher = await Mentor.findByPk(id, {
+      include: Pupil,
+    });
+    if (!teacher) {
+      return res.status(404).json({ error: 'Teacher not found' });
+    }
+    res.status(200).json(teacher);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 exports.updateMentor = async (req, res ) => {
   const { id } = req.params;
