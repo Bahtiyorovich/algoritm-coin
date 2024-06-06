@@ -14,7 +14,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { darkMode } = useTheme();
   const user  = useSelector(state => state.user.user);
-
+  
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate('/login');

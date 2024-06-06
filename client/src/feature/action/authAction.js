@@ -23,8 +23,8 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (userData, { r
 
 export const getUser = createAsyncThunk("user/getUser", async (_, { rejectWithValue }) => {
   try {
-    const response = await instance.get("/auth/users/me");
-    return response.data;
+    const {data} = await instance.get("/auth/users/me");
+    return data;
   } catch (error) {
     return rejectWithValue(error.message);
   }

@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser, logoutUser } from "../action/authAction";
+import { getUser } from "../action/authAction";
 
 const initialState = {
   loading: false,
-  loggedIn: false,
   error: null,
   user: null,
 };

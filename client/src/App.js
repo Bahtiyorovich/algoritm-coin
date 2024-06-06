@@ -1,24 +1,21 @@
 import React, { Suspense, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Register, Login, Main} from './components';
-import { useDispatch, useSelector } from 'react-redux';
+import { getCookie } from './helpers/cookieStorage';
+import { useDispatch } from 'react-redux';
 import { getUser } from './feature/action/authAction';
 
-
 const App = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  const { loading } = useSelector((state) => state.auth);
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   useEffect(() => {
-    if (!user) {
-      dispatch(getUser());
+    const token = getCookie('token')
+    if(token){
+      dispatch(getUser())
+      navigate('/')
     }
-  }, [dispatch, user]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    else { navigate('/login') }
+  },[dispatch]); // navigate va token dependency arrayga qo'shildi
 
   return (
     <div className="flex items-center justify-center h-screen w-full">
@@ -26,8 +23,8 @@ const App = () => {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Main/>}>
-            <Route path='/*' element={<Main/>}/>
+          <Route path="/" element={<Main />}>
+            <Route path="/*" element={<Main/>} />
           </Route>
         </Routes>
       </Suspense>
